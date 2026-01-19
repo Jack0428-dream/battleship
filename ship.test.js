@@ -2,7 +2,7 @@ const Ship = require('./ship');
 
 test('see if class has arrays', () => {
     const test = new Ship();
-    expect(test.carrier.length).toBe(5);
+    expect(test.carrier['carrier'].length).toBe(5);
 });
 
 test('add hit an array', () => {

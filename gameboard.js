@@ -1,18 +1,12 @@
-// should be able to place ships at specific coordinates 
-// by calling the ship factory or class
-
-// should have a "receiveAttack" function that takes a pair of coordinates
-// determines whether or not the attack hit a ship and then sends the 'hit'
-// function to the correct shipt, or records the coordinates of the missed shot
-
-// should keep track of missed attacks -> can display them properly
-
-// should be able to report whether or not all of their ships have been sunk
+const Ship = require('./ship')
 
 class Gameboard{
     constructor() {
         // how to keep track of missed attacks?
-
+        // instance of Ship class
+        this.playerShip = new Ship;
+        this.missed = [];
+        this.ships = {};
     }
 
     placeShip(ship, coordinates, side = 'h') {
@@ -42,20 +36,47 @@ class Gameboard{
             }
         }
         
-        return placed;
+        if(ship === this.playerShip.carrier) {
+            this.ships.carrier = placed;
+        } else if(ship === this.playerShip.battleship) {
+            this.ships.battleship = placed;
+        } else if(ship === this.playerShip.destroyer) {
+            this.ships.destroyer = placed;
+        } else if(ship === this.playerShip.submarine) {
+            this.ships.submarine = placed;
+        } else if(ship === this.playerShip.patrol) {
+            this.ships.patrol = placed;
+        }
     }
 
-    receiveAttack() {
-        // takes a pair of coordinates
-        // determines whether or not the attack hit a ship 
-        // sends the 'hit' function to the correct ship
-        // or records the coordinates of the missed shot
+    receiveAttack(coord) {
+        // see if the ships obj has the ship that's placed
+        // in given coor, if it does, send a signal to the same ship 
+        // if it doesn't record the coord to missed 
+        for(key in this.ships) {
+            // key is string it is not the array itself. 
+            this.ships[key].forEach(item => {
+                if(coord[0] === item[0] && coord[1] === item[1]) {
+                    // send a signal to the same ship
+                    this.playerShip.hit(this.playerShip[key]);
+                    // key is string how to unstring it?
+                    // change the design. that I don't have to think about unstring someting to use it.
+                    return;
+                }
+            })
+        }
+        
+        this.missed.push(coord);
     }
-
-    // keep track of missed attacks so they can display them properly 
-
+ 
     report() {
+        for(key in this.ships) {
+            if(this.playerShip.isSunk(this.placeShip[key]) === false) {
+                return 'Game is still going!'
+            }
+        }
 
+        return 'Ships are all gone, Game Over'
     }
 }
 
