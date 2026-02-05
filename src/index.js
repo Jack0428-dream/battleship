@@ -4,77 +4,195 @@ const Ship = require('./ship');
 const Gameboard = require('./gameboard');
 const Player = require('./player');
 
-const body = document.querySelector('#container');
+const container = document.querySelector('#container');
 const header = document.createElement('div');
-const bCon = document.createElement('div');
-
-const hdiv1 = document.createElement('div');
-const hdiv2 = document.createElement('div');
-
-const bdiv1 = document.createElement('div');
-const bdiv2 = document.createElement('div');
-
 header.classList.add('header');
-bCon.classList.add("bCon");
+const title = document.createElement('div');
+title.classList.add('title');
+const deploy = document.createElement('div');
+deploy.classList.add('deploy');
 
-body.appendChild(header);
-body.appendChild(bCon);
+container.appendChild(header);
+header.appendChild(title);
+header.appendChild(deploy);
 
-bCon.appendChild(bdiv1);
-bCon.appendChild(bdiv2);
-bdiv1.classList.add('player');
-bdiv2.classList.add('computer');
+title.textContent = "Battle Ship";
 
-header.appendChild(hdiv1);
-header.appendChild(hdiv2);
-hdiv1.classList.add('title');
-hdiv2.classList.add('rule');
-
-hdiv1.textContent = "Battle Ship"
-hdiv2.textContent = 'Rules'
-
-bdiv1.textContent = 'Players'
-bdiv2.textContent = 'Computer'
-
-const dialog = document.querySelector('.dialog');
-const close = document.querySelector('dialog button');
-
-hdiv2.addEventListener('click', () => {
-    dialog.showModal();
-})
-
-close.addEventListener('click', () => {
-    dialog.close();
-})
-
-// board making function 
-function makingGrid() {
-    const mainBoard = document.createElement('div');
-    mainBoard.classList.add('mainboard');
-
-    for(let i = 0; i < 81; i++) {
-        const divB = document.createElement('div');
-        mainBoard.appendChild(divB);
-        divB.classList.add('grid');
+const hor_ver = document.createElement('button');
+hor_ver.addEventListener('click', () => {
+    if(hor_ver.textContent === 'Horizontal') {
+        hor_ver.textContent = 'Vertical';
+    } else {
+        hor_ver.textContent = 'Horizontal'
     }
-    
-    return mainBoard;
+})
+const random = document.createElement('button');
+
+deploy.appendChild(hor_ver);
+deploy.appendChild(random);
+
+hor_ver.textContent = "Horizontal";
+random.textContent = "Random"
+
+const bCon = document.createElement('div');
+bCon.classList.add('bcon');
+const ships = document.createElement('div');
+ships.classList.add('ships');
+const board = document.createElement('div');
+board.classList.add('board');
+
+for(let i = 0; i < 81; i++) {
+    const div = document.createElement('div');
+    if(i >= 0 && i < 9) {
+        div.dataset.row = '1';
+        div.dataset.col = `${i+1}`;
+    } else if(i >= 9 && i < 18) {
+        div.dataset.row = '2';
+        div.dataset.col = `${i-8}`;        
+    } else if(i >=18 && i < 27) {
+        div.dataset.row = '3';
+        div.dataset.col = `${i-17}`;
+    } else if(i >= 27 && i < 36) {
+        div.dataset.row = '4';
+        div.dataset.col = `${i-27}`;
+    } else if (i >= 36 && i < 45) {
+        div.dataset.row = '5';
+        div.dataset.col = `${i-35}`;
+    } else if (i >= 45 && i < 54) {
+        div.dataset.row = '6';
+        div.dataset.col = `${i-44}`;
+    } else if (i >= 54 && i < 63) {
+        div.dataset.row = '7';
+        div.dataset.col = `${i-53}`;
+    } else if (i >= 63 && i < 72) {
+        div.dataset.row = '8';
+        div.dataset.col = `${i-62}`;
+    } else if (i >= 72 && i < 81) {
+        div.dataset.row = '9';
+        div.dataset.col = `${i-71}`;
+    }
+    div.classList.add('g-board');
+    board.appendChild(div);
 }
 
-bdiv1.addEventListener('click', () => {
-    bCon.textContent = "";
-    const board1p = makingGrid();
-    const board2p = makingGrid();
+container.appendChild(bCon);
+bCon.appendChild(ships);
+bCon.appendChild(board);
 
-    bCon.appendChild(board1p);
-    bCon.appendChild(board2p);
+const carrier = document.createElement('div');
+const battleship = document.createElement('div');
+const destroyer = document.createElement('div');
+const submarine = document.createElement('div');
+const patrol = document.createElement('div');
+
+ships.appendChild(carrier);
+ships.appendChild(battleship);
+ships.appendChild(destroyer);
+ships.appendChild(submarine);
+ships.appendChild(patrol);
+
+carrier.textContent = 'Carrier';
+carrier.setAttribute('draggable', 'true');
+
+battleship.textContent = 'BattleShip';
+battleship.setAttribute('draggable', 'true');
+
+destroyer.textContent = 'Destroyer';
+destroyer.setAttribute('draggable', 'true');
+
+submarine.textContent = 'Submarine';
+submarine.setAttribute('draggable', 'true');
+
+patrol.textContent = 'Patrol';
+patrol.setAttribute('draggable', 'true');
+
+const footer = document.createElement('div');
+footer.classList.add('footer');
+const start = document.createElement('button');
+start.textContent = 'Play';
+
+container.appendChild(footer);
+footer.appendChild(start);
+
+const p1Board = new Gameboard;
+
+const divs = board.querySelectorAll('div');
+
+// Add data-row / data-col to every grid cell
+// use placeShip()
+// inside drop only call that function 
+// let the board logic decide success/failure
+
+function dragstartHandler(ev) {
+    ev.dataTransfer.setData("text/plain", ev.target.innerText);
+    ev.dataTransfer.setData('text/html', ev.target.outerHTML);
+    ev.dataTransfer.setData(
+        "text/uri-list",
+        ev.target.ownerDocument.location.href,
+    )
+}
+
+[carrier, battleship, destroyer, submarine, patrol].forEach(ship => {
+    ship.addEventListener('dragstart', dragstartHandler);
+});
+
+function coloring(data) {
+    let string = data.toLowerCase();
+
+    divs.forEach(item => {
+        for(let i = 0; i < p1Board.ships[string].length; i++) {
+            if( p1Board.ships[string][i][0] === Number(item.dataset.row) && p1Board.ships[string][i][1] === Number(item.dataset.col)) {
+                item.style.backgroundColor = 'orange';
+            }
+        }
+    })
+}
+
+divs.forEach(item => {
+    item.addEventListener('dragover', (ev) => {
+        ev.preventDefault();
+    })
+
+    item.addEventListener('drop', (ev) => {
+        ev.preventDefault();
+
+        let data = ev.dataTransfer.getData("text/plain");
+
+        let direction = 'h'
+        if(hor_ver.textContent === 'Horizontal') {
+            direction = 'h'
+        } else if(hor_ver.textContent === 'Vertical') {
+            direction = 'v';
+        }
+
+        let coord = [];
+        coord[0] = Number(item.dataset.row);
+        coord[1] = Number(item.dataset.col);
+
+        let kind = '';
+        // gameboard placeShip function adapt
+        if(data === 'Carrier') {
+            kind = p1Board.playerShip.carrier;
+        } else if(data === 'BattleShip') {
+            kind = p1Board.playerShip.battleship;
+        } else if(data === 'Destroyer') {
+            kind = p1Board.playerShip.destroyer;
+        } else if(data === 'Submarine') {
+            kind = p1Board.playerShip.submarine;
+        } else if(data === 'Patrol') {
+            kind = p1Board.playerShip.patrol;
+        }
+
+        p1Board.placeShip(kind, coord, direction);
+        console.log(p1Board.ships);
+
+        coloring(data);
+    })
 })
 
-bdiv2.addEventListener('click', () => {
-    bCon.textContent = "";
-    const board1p = makingGrid();
-    const board2p = makingGrid();
 
-    bCon.appendChild(board1p);
-    bCon.appendChild(board2p);
-})
+// Drop happens -> done
+// placeShip() runs -> done 
+// UI loops through all ship coordinates
+// grid cell that matches -> color it 
+

@@ -17,21 +17,21 @@ class Gameboard{
         if(side === 'h') {
             if((ship.length + coordinates[0]) > 10) {
                 for(let i = 0; i < ship.length; i++) {
-                    placed.push([coordinates[0]-i, coordinates[1]])
+                    placed.push([coordinates[0], coordinates[1]-i])
                 }
             } else {
                 for(let i = 0; i < ship.length; i++) {
-                    placed.push([coordinates[0]+i, coordinates[1]])
+                    placed.push([coordinates[0], coordinates[1] + i])
                 }
             }
         } else if(side === 'v') {
             if((ship.length + coordinates[1]) > 10) {
                 for(let i = 0; i < ship.length; i++) {
-                    placed.push([coordinates[0], coordinates[1]-i])
+                    placed.push([coordinates[0]-i, coordinates[1]])
                 }
             } else {
                 for(let i = 0; i < ship.length; i++) {
-                    placed.push([coordinates[0], coordinates[1]+i])
+                    placed.push([coordinates[0]+i, coordinates[1]])
                 }
             }
         }

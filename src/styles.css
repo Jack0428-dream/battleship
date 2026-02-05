@@ -1,79 +1,96 @@
 #container {
-    display: grid;
-    grid-template-rows: 1fr 4fr;
-    background-color: azure;
+    margin: 0;
+    padding: 0;
 }
 
 .header {
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    background-color: azure;
-    height: 150px;
+    background-color: antiquewhite;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    font-size: 30px;
-}
-
-.bCon {
-    height: 100%;
-    border-top: 2px solid black;
-    display: flex;
-    justify-content: space-evenly;
     align-items: center;
 }
 
 .title {
-    font-size: 50px;
-    position: relative;
-    left: 30px;
+    font-size: 100px;
 }
 
-.rule {
+.deploy {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.deploy > button {
+    font-size: 30px;
+    margin: 20px;
+    border-radius: 7px;
+    width: 170px;
+}
+
+.bcon {
+    background-color: antiquewhite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.ships {
+    width: 300px;
+    height: 500px;
+    border: 2px solid black;
+    margin-top: 10px;
+    margin: 30px;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    border: 2px solid black;
+    width: 500px;
+    height: 500px;
+    margin-top: 10px;
+    margin: 30px;
+    border-radius: 5px;
+}
+
+.board > div {
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.board > div:hover {
+    background-color: #ec8c17;
+}
+
+.ships {
     display: flex;
     flex-direction: column;
-    justify-content: end;
-    font-size: 25px;
-    position: relative;
-    left: 470px;
+    justify-content: space-evenly;
 }
 
-.rule:hover {
-    color: aqua;
-}
-
-.player, .computer{
-    width: 300px;
-    height: 175px;
-    border: 5px solid black;
-    border-radius: 10px;
+.ships > div {
     font-size: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
-.bCon > .player:hover, .bCon > .computer:hover {
-    background-color: aqua;
+.ships > div:hover {
+    background-color: bisque;
 }
 
-.dialog {
-    width: 500px;
+.footer {
+    background-color: antiquewhite;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 50px;
 }
 
-.mainboard {
-    width: 500px;
-    height: 500px;
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: repeat(9, 1fr);
-    border: 1px solid black;
-}
-
-.grid {
-    border: 1px solid black;
-}
-
-.grid:hover {
-    background-color: aqua;
+.footer > button {
+    font-size: 30px;
+    width: 300px;
+    border-radius: 10px;
 }
