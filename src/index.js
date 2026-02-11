@@ -1,5 +1,6 @@
 import { data } from "browserslist";
 import "./styles.css";
+import { co } from "co";
 const Ship = require('./ship');
 const Gameboard = require('./gameboard');
 const Player = require('./player');
@@ -54,7 +55,7 @@ for(let i = 0; i < 81; i++) {
         div.dataset.col = `${i-17}`;
     } else if(i >= 27 && i < 36) {
         div.dataset.row = '4';
-        div.dataset.col = `${i-27}`;
+        div.dataset.col = `${i-26}`;
     } else if (i >= 36 && i < 45) {
         div.dataset.row = '5';
         div.dataset.col = `${i-35}`;
@@ -136,13 +137,17 @@ function dragstartHandler(ev) {
     ship.addEventListener('dragstart', dragstartHandler);
 });
 
-function coloring(data) {
-    let string = data.toLowerCase();
-
+function coloring() {
     divs.forEach(item => {
-        for(let i = 0; i < p1Board.ships[string].length; i++) {
-            if( p1Board.ships[string][i][0] === Number(item.dataset.row) && p1Board.ships[string][i][1] === Number(item.dataset.col)) {
-                item.style.backgroundColor = 'orange';
+        for(let key in p1Board.ships) {
+            const coords = p1Board.ships[key];
+
+            if(!Array.isArray(coords)) continue;
+
+            for(let i = 0; i < coords.length; i++) {
+                if(Number(item.dataset.row) === coords[i][0] && Number(item.dataset.col) === coords[i][1]) {
+                    item.style.backgroundColor = 'orange'
+                }
             }
         }
     })
@@ -184,12 +189,47 @@ divs.forEach(item => {
         }
 
         p1Board.placeShip(kind, coord, direction);
-        console.log(p1Board.ships);
+        // console.log(p1Board.ships);
 
-        coloring(data);
+        coloring();
+
+        console.log(data);
+
+        if(data === carrier.textContent) {
+            carrier.textContent = "";
+        } else if(data === battleship.textContent) {
+            battleship.textContent = "";
+        } else if(data === destroyer.textContent) {
+            destroyer.textContent = "";
+        } else if(data === submarine.textContent) {
+            submarine.textContent = "";
+        } else if(data === patrol.textContent) {
+            patrol.textContent = "";
+        }
     })
 })
 
+function generator() {
+    let num = Math.floor(Math.random()*8 + 1)
+
+    return num;
+}
+
+random.addEventListener('click', () => {
+    // clearboard
+    // randomlyplacingships
+    coloring();
+    
+})
+
+start.addEventListener('click', () => {
+    // opening new board with saved information (player)
+    // another board for the computer which is not colored (computer)
+})
+
+// playing game 
+// announces the winner 
+// every grid cell should be allowed to 
 
 // Drop happens -> done
 // placeShip() runs -> done 

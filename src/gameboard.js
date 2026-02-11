@@ -15,7 +15,7 @@ class Gameboard{
         let placed = [];
 
         if(side === 'h') {
-            if((ship.length + coordinates[0]) > 10) {
+            if((ship.length + coordinates[1]) > 10) {
                 for(let i = 0; i < ship.length; i++) {
                     placed.push([coordinates[0], coordinates[1]-i])
                 }
@@ -25,7 +25,7 @@ class Gameboard{
                 }
             }
         } else if(side === 'v') {
-            if((ship.length + coordinates[1]) > 10) {
+            if((ship.length + coordinates[0]) > 10) {
                 for(let i = 0; i < ship.length; i++) {
                     placed.push([coordinates[0]-i, coordinates[1]])
                 }
@@ -36,6 +36,17 @@ class Gameboard{
             }
         }
         
+        // comparing placed coordinates and ships object
+        for(let key in this.ships) {
+            for(let item of this.ships[key]) {
+                for(let i = 0; i < placed.length; i++) {
+                    if(item[0] === placed[i][0] && item[1] === placed[i][1]) {
+                        return false;
+                    }
+                }
+            }
+        }
+
         if(ship === this.playerShip.carrier) {
             this.ships.carrier = placed;
         } else if(ship === this.playerShip.battleship) {
