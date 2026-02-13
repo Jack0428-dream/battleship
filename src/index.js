@@ -210,16 +210,37 @@ divs.forEach(item => {
 })
 
 function generator() {
-    let num = Math.floor(Math.random()*8 + 1)
+    let num1 = Math.floor(Math.random()*8 + 1);
+    let num2 = Math.floor(Math.random()*8 + 1);
 
-    return num;
+    return [num1, num2];
+}
+
+function randomdir() {
+    let random = Math.random();
+
+    if( random < 0.5) {
+        return 'h';
+    } else if( random >= 0.5) {
+        return 'v';
+    }
 }
 
 random.addEventListener('click', () => {
     // clearboard
-    // randomlyplacingships
-    coloring();
+    p1Board.ships = {};
+    divs.forEach(item => {
+        item.style.backgroundColor = '';
+    })
+
+    // randomlyplacingships 
+    for(let item in p1Board.playerShip) {
+        while( p1Board.placeShip(p1Board.playerShip[item], generator(), randomdir()) !== true ) {
+            p1Board.placeShip(p1Board.playerShip[item], generator(), randomdir())
+        }
+    }
     
+    coloring();   
 })
 
 start.addEventListener('click', () => {

@@ -49,14 +49,19 @@ class Gameboard{
 
         if(ship === this.playerShip.carrier) {
             this.ships.carrier = placed;
+            return true;
         } else if(ship === this.playerShip.battleship) {
             this.ships.battleship = placed;
+            return true;
         } else if(ship === this.playerShip.destroyer) {
             this.ships.destroyer = placed;
+            return true;
         } else if(ship === this.playerShip.submarine) {
             this.ships.submarine = placed;
+            return true;
         } else if(ship === this.playerShip.patrol) {
             this.ships.patrol = placed;
+            return true;
         }
     }
 
